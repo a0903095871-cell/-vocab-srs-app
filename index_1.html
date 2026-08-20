@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#EEF1EA">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
+<link rel="manifest" id="manifestLink">
+<script>
+  // 內嵌 PWA manifest，讓「加入主畫面」有正確的名稱與圖示
+  const manifest = {
+    name: "字卡目錄 · 英文單字複習系統",
+    short_name: "字卡目錄",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#EEF1EA",
+    theme_color: "#EEF1EA",
+    icons: [{
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E",
+      sizes: "192x192", type: "image/svg+xml"
+    }]
+  };
+  document.getElementById('manifestLink').setAttribute('href', 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest)));
+</script>
+<title>字卡目錄 · 英文單字複習系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF1EA;
+    --paper-line:#DDE3D6;
+    --card:#FFFDF8;
+    --ink:#23241F;
+    --ink-soft:#54574C;
+    --muted:#8B8E80;
+    --teal:#2F6F5E;
+    --teal-deep:#204F42;
+    --amber:#C98A2E;
+    --amber-bg:#FBEEDA;
+    --coral:#B3503A;
+    --coral-bg:#F8E4DD;
+    --sage:#4E7E4C;
+    --sage-bg:#E4EEDD;
+    --line:#D8DCCF;
+    --shadow: 0 1px 2px rgba(35,36,31,.06), 0 8px 24px -12px rgba(35,36,31,.18);
+    --radius: 14px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 27px, var(--paper-line) 27px 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .serif{ font-family:'Fraunces', serif; }
+
+  button{ font-family:inherit; }
+  ::selection{ background:var(--teal); color:#fff; }
+
+  /* ---------- App shell ---------- */
+  #app{
+    max-width:1180px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+  }
+  .sidebar{
+    display:none;
+    width:220px;
+    flex-shrink:0;
+    padding:28px 14px;
+    border-right:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:20px;
+    letter-spacing:.01em;
+    display:flex; align-items:center; gap:8px;
+    margin:2px 8px 26px;
+    color:var(--ink);
+  }
+  .brand .dot{ width:9px; height:9px; border-radius:50%; background:var(--teal); display:inline-block; }
+  .navlist{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
+  .navlist button{
+    width:100%; text-align:left; border:none; background:none; cursor:pointer;
+    padding:11px 12px; border-radius:10px; font-size:15px; color:var(--ink-soft);
+    display:flex; align-items:center; gap:10px; font-weight:500;
+    transition:background .15s, color .15s;
+  }
+  .navlist button .ic{ font-size:17px; width:20px; text-align:center; }
+  .navlist button.active{ background:var(--teal); color:#fff; }
+  .navlist button:not(.active):hover{ background:#E4E8DE; }
+  .side-foot{ margin-top:auto; padding:12px; font-size:12px; color:var(--muted); line-height:1.6; }
+
+  main{ flex:1; min-width:0; padding:20px 16px calc(84px + var(--safe-bottom)); }
+  @media (min-width:768px){
+    .sidebar{ display:flex; flex-direction:column; }
+    main{ padding:32px 36px 40px; }
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .topbar h1{
+    font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin:0;
+    display:flex; align-items:center; gap:10px;
+  }
+  .streak-chip{
+    display:flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:6px 12px; font-size:13px; font-weight:600; color:var(--amber);
+    box-shadow:var(--shadow);
+  }
+
+  /* ---------- Bottom tab bar (mobile) ---------- */
+  .tabbar{
+    position:fixed; left:0; right:0; bottom:0; z-index:40;
+    display:flex; justify-content:space-around;
+    background:var(--card);
+    border-top:1px solid var(--line);
+    padding:8px 6px calc(8px + var(--safe-bottom));
+    box-shadow:0 -6px 18px -10px rgba(35,36,31,.25);
+  }
+  @media (min-width:768px){ .tabbar{ display:none; } }
+  .tabbar button{
+    background:none; border:none; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--muted); font-size:11px; font-weight:600; padding:4px 10px;
+    border-radius:10px; min-width:60px;
+  }
+  .tabbar button .ic{ font-size:20px; }
+  .tabbar button.active{ color:var(--teal); }
+
+  .view{ display:none; animation:fadein .25s ease; }
+  .view.active{ display:block; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    border:1px solid var(--line); background:var(--card); color:var(--ink);
+    padding:10px 16px; border-radius:10px; font-size:14px; font-weight:600;
+    cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    transition:transform .1s, background .15s, border-color .15s;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .btn-primary:hover{ background:var(--teal-deep); }
+  .btn-ghost{ background:transparent; }
+  .btn-danger{ color:var(--coral); border-color:var(--coral-bg); }
+  .btn-sm{ padding:7px 12px; font-size:13px; border-radius:8px; }
+  .btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+  /* ---------- Cards / sections ---------- */
+  .panel{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px;
+  }
+  .section-title{
+    font-family:'Fraunces', serif; font-size:16px; font-weight:600; margin:0 0 12px;
+    display:flex; align-items:center; gap:8px; color:var(--ink);
+  }
+  .grid{ display:grid; gap:14px; }
+  .grid-2{ grid-template-columns:1fr; }
+  @media (min-width:640px){ .grid-2{ grid-template-columns:1fr 1fr; } }
+  .grid-4{ grid-template-columns:repeat(2,1fr); }
+  @media (min-width:640px){ .grid-4{ grid-template-columns:repeat(4,1fr); } }
+
+  .stat-box{ text-align:left; }
+  .stat-box .num{ font-family:'JetBrains Mono', monospace; font-size:26px; font-weight:700; color:var(--teal); }
+  .stat-box .lbl{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+  /* ---------- CEFR badge ---------- */
+  .cefr{ display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; padding:2px 7px; border-radius:6px; font-family:'JetBrains Mono', monospace; }
+  .cefr-A{ background:var(--sage-bg); color:var(--sage); }
+  .cefr-B{ background:var(--amber-bg); color:var(--amber); }
+  .cefr-C{ background:var(--coral-bg); color:var(--coral); }
+  .cefr-none{ background:#EEE; color:#999; }
+
+  /* ================= REVIEW TAB ================= */
+  .review-toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+  select, input[type=text], input[type=number], textarea{
+    font-family:inherit; font-size:14px; border:1px solid var(--line); border-radius:9px;
+    padding:9px 11px; background:var(--card); color:var(--ink);
+  }
+  select:focus, input:focus, textarea:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+
+  .deck-empty{ text-align:center; padding:60px 20px; color:var(--muted); }
+  .deck-empty .big{ font-size:40px; margin-bottom:10px; }
+
+  .card-stage{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .progress-row{ width:100%; max-width:520px; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muted); }
+  .progress-track{ flex:1; height:6px; border-radius:4px; background:var(--line); overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--teal); border-radius:4px; transition:width .3s; }
+
+  .flip-wrap{
+    width:100%; max-width:520px; height:340px; perspective:1400px; cursor:pointer;
+  }
+  .flip-card{
+    position:relative; width:100%; height:100%;
+    transform-style:preserve-3d; transition:transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .flip-card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden;
+    border-radius:18px; border:1px solid var(--line); background:var(--card);
+    box-shadow:var(--shadow);
+    background-image:repeating-linear-gradient(180deg, transparent 0 30px, var(--paper-line) 30px 31px);
+    display:flex; flex-direction:column;
+    padding:22px 24px;
+  }
+  .face-back{ transform:rotateY(180deg); overflow-y:auto; }
+  .punch{ position:absolute; top:16px; left:16px; width:14px; height:14px; border-radius:50%; background:var(--paper); border:1px solid var(--line); box-shadow:inset 0 1px 2px rgba(0,0,0,.15); }
+  .cat-no{ position:absolute; top:18px; right:20px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); }
+  .face-front{ align-items:center; justify-content:center; text-align:center; gap:10px; }
+  .front-word{ font-family:'Fraunces', serif; font-weight:600; font-size:clamp(28px,7vw,42px); color:var(--ink); }
+  .front-ipa{ font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:14px; }
+  .front-hint{ margin-top:14px; font-size:12px; color:var(--muted); }
+  .face-back .back-word{ font-family:'Fraunces', serif; font-weight:600; font-size:22px; margin-bottom:6px; }
+  .back-zh{ font-size:20px; font-weight:700; margin-bottom:10px; }
+  .back-block{ margin-bottom:10px; }
+  .back-label{ font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+  .back-collo{ font-size:14px; color:var(--ink-soft); }
+  .back-example{ font-size:14px; color:var(--ink-soft); font-style:italic; line-height:1.5; }
+
+  .sound-row{ display:flex; gap:8px; justify-content:center; }
+  .sound-btn{
+    border:1px solid var(--line); background:var(--paper); border-radius:999px;
+    padding:6px 13px; font-size:12px; font-weight:700; cursor:pointer; color:var(--ink-soft);
+    display:flex; align-items:center; gap:5px;
+  }
+  .sound-btn:hover{ background:var(--line); }
+
+  .grade-row{
+    width:100%; max-width:520px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;
+    opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .3s, transform .3s;
+  }
+  .grade-row.show{ opacity:1; transform:none; pointer-events:auto; }
+  .grade-btn{
+    border:none; border-radius:12px; padding:14px 8px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    font-weight:700; font-size:13px; color:#fff;
+  }
+  .grade-btn .k{ font-family:'JetBrains Mono',monospace; font-size:11px; opacity:.85; }
+  .grade-notok{ background:var(--coral); }
+  .grade-ok{ background:var(--amber); }
+  .grade-easy{ background:var(--teal); }
+
+  .kbd-hint{ text-align:center; font-size:11px; color:var(--muted); margin-top:6px; }
+  kbd{ background:var(--paper); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-family:'JetBrains Mono',monospace; }
+
+  /* ================= LIBRARY TAB ================= */
+  .lib-toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .lib-toolbar input[type=text]{ flex:1; min-width:140px; }
+  .word-row{
+    display:flex; align-items:center; gap:12px; padding:12px 10px; border-bottom:1px solid var(--line);
+  }
+  .word-row:last-child{ border-bottom:none; }
+  .word-row .we{ font-family:'Fraunces',serif; font-weight:600; font-size:16px; min-width:100px; }
+  .word-row .wz{ color:var(--ink-soft); font-size:14px; flex:1; }
+  .word-row .wmeta{ font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .word-row .wdel{ background:none; border:none; color:var(--coral); cursor:pointer; font-size:16px; padding:4px 6px; }
+  .empty-hint{ text-align:center; padding:40px 10px; color:var(--muted); font-size:14px; }
+
+  .modal-bg{
+    display:none; position:fixed; inset:0; background:rgba(35,36,31,.45); z-index:60;
+    align-items:flex-end; justify-content:center;
+  }
+  .modal-bg.show{ display:flex; }
+  @media (min-width:640px){ .modal-bg{ align-items:center; } }
+  .modal{
+    background:var(--card); width:100%; max-width:560px; max-height:88vh; overflow-y:auto;
+    border-radius:18px 18px 0 0; padding:22px; box-shadow:0 -10px 30px rgba(0,0,0,.25);
+  }
+  @media (min-width:640px){ .modal{ border-radius:16px; } }
+  .modal h2{ font-family:'Fraunces',serif; font-size:18px; margin:0 0 14px; }
+  .field{ margin-bottom:12px; }
+  .field label{ display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:4px; }
+  .field input, .field select, .field textarea{ width:100%; }
+  .field textarea{ min-height:60px; resize:vertical; }
+  .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:16px; flex-wrap:wrap; }
+  .tabs-mini{ display:flex; gap:6px; margin-bottom:14px; }
+  .tabs-mini button{ flex:1; }
+  .tabs-mini button.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .hint-box{ font-size:12px; color:var(--muted); background:var(--paper); border-radius:8px; padding:10px 12px; line-height:1.6; margin-bottom:10px; }
+
+  /* ================= STATS TAB ================= */
+  .chart-wrap{ overflow-x:auto; }
+  svg text{ font-family:'JetBrains Mono', monospace; }
+
+  /* ================= SETTINGS TAB ================= */
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); gap:14px; flex-wrap:wrap; }
+  .settings-row:last-child{ border-bottom:none; }
+  .settings-row .lab{ font-weight:600; font-size:14px; }
+  .settings-row .sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+  .toast{
+    position:fixed; bottom:calc(90px + var(--safe-bottom)); left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:80; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  @media (min-width:768px){ .toast{ bottom:24px; } }
+  .filter-pills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .pill{ border:1px solid var(--line); background:var(--card); border-radius:999px; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer; color:var(--ink-soft); }
+  .pill.active{ background:var(--ink); border-color:var(--ink); color:#fff; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Sidebar (desktop) -->
+  <nav class="sidebar">
+    <div class="brand"><span class="dot"></span>字卡目錄</div>
+    <ul class="navlist" id="sideNav">
+      <li><button data-tab="review" class="active"><span class="ic">📖</span>複習</button></li>
+      <li><button data-tab="library"><span class="ic">📚</span>字庫</button></li>
+      <li><button data-tab="stats"><span class="ic">📊</span>統計</button></li>
+      <li><button data-tab="settings"><span class="ic">⚙️</span>設定</button></li>
+    </ul>
+    <div class="side-foot">單字卡片式 SRS 複習系統<br>資料儲存於本機 IndexedDB</div>
+  </nav>
+
+  <main>
+    <div class="topbar">
+      <h1 id="pageTitle">📖 複習</h1>
+      <div class="streak-chip">🔥 <span id="streakNum">0</span> 天連續</div>
+    </div>
+
+    <!-- ============ REVIEW VIEW ============ -->
+    <section class="view active" id="view-review">
+      <div class="review-toolbar">
+        <select id="filterCefr"><option value="all">全部 CEFR</option></select>
+        <select id="filterTag"><option value="all">全部標籤</option></select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);">
+          <input type="checkbox" id="filterWrong" style="width:16px;height:16px;"> 只複習常錯單字
+        </label>
+        <button class="btn btn-sm" id="btnBuildDeck">🔄 依篩選重建牌組</button>
+      </div>
+
+      <div id="reviewEmpty" class="deck-empty" style="display:none;">
+        <div class="big">📇</div>
+        <div style="font-weight:700;margin-bottom:6px;">字庫還是空的</div>
+        <div style="font-size:13px;">前往「字庫」分頁匯入或新增單字，即可開始複習。</div>
+      </div>
+
+      <div id="reviewDone" class="deck-empty" style="display:none;">
+        <div class="big">✅</div>
+        <div style="font-weight:700;margin-bottom:6px;">這個牌組今天複習完了！</div>
+        <div style="font-size:13px;" id="doneSub">明天再回來繼續，或調整篩選條件重建牌組。</div>
+      </div>
+
+      <div class="card-stage" id="cardStage" style="display:none;">
+        <div class="progress-row">
+          <span id="progressText" class="mono">0 / 0</span>
+          <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+          <span id="masteredText" class="mono">已精熟 0</span>
+        </div>
+
+        <div class="flip-wrap" id="flipWrap">
+          <div class="flip-card" id="flipCard">
+            <div class="face face-front" id="faceFront">
+              <div class="punch"></div>
+              <div class="cat-no mono" id="catNoFront">No. 000</div>
+              <span class="cefr cefr-none" id="frontCefr" style="position:absolute;top:18px;left:38px;"></span>
+              <div class="front-word" id="frontWord">word</div>
+              <div class="front-ipa" id="frontIpa"></div>
+              <div class="sound-row">
+                <button class="sound-btn" data-accent="UK" onclick="event.stopPropagation();speakCurrent('UK')">🇬🇧 英式</button>
+                <button class="sound-btn" data-accent="US" onclick="event.stopPropagation();speakCurrent('US')">🇺🇸 美式</button>
+              </div>
+              <div class="front-hint">點卡片或按 <kbd>Space</kbd> 翻面</div>
+            </div>
+            <div class="face face-back" id="faceBack">
+              <div class="punch"></div>
+              <div class="cat-no mono" id="catNoBack">No. 000</div>
+              <div class="back-word" id="backWord">word</div>
+              <div class="back-zh" id="backZh">中文意思</div>
+              <div class="back-block" id="blockCollo">
+                <div class="back-label">搭配詞</div>
+                <div class="back-collo" id="backCollo"></div>
+              </div>
+              <div class="back-block" id="blockEx">
+                <div class="back-label">例句</div>
+                <div class="back-example" id="backExample"></div>
+              </div>
+              <div class="sound-row">
+                <button class="sound-btn" data-accent="UK" onclick="event.stopPropagation();speakCurrent('UK')">🇬🇧 發音</button>
+                <button class="sound-btn" data-accent="US" onclick="event.stopPropagation();speakCurrent('US')">🇺🇸 發音</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grade-row" id="gradeRow">
+          <button class="grade-btn grade-notok" onclick="gradeCurrent('notok')">😵 不熟<span class="k">1</span></button>
+          <button class="grade-btn grade-ok" onclick="gradeCurrent('ok')">🙂 還好<span class="k">2</span></button>
+          <button class="grade-btn grade-easy" onclick="gradeCurrent('easy')">😎 簡單<span class="k">3</span></button>
+        </div>
+        <div class="kbd-hint"><kbd>Space</kbd> 翻面 · <kbd>Enter</kbd> 發音 · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> 評分</div>
+      </div>
+    </section>
+
+    <!-- ============ LIBRARY VIEW ============ -->
+    <section class="view" id="view-library">
+      <div class="lib-toolbar">
+        <input type="text" id="searchWord" placeholder="🔍 搜尋英文或中文…">
+        <button class="btn btn-sm" id="btnAddWord">➕ 新增單字</button>
+        <button class="btn btn-sm" id="btnImport">📥 批次匯入</button>
+      </div>
+      <div class="filter-pills" id="cefrPills"></div>
+      <div class="panel" style="padding:6px 14px;">
+        <div id="wordList"></div>
+        <div class="empty-hint" id="libEmptyHint" style="display:none;">目前沒有單字，點「新增單字」或「批次匯入」開始建立字庫。</div>
+      </div>
+    </section>
+
+    <!-- ============ STATS VIEW ============ -->
+    <section class="view" id="view-stats">
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="panel stat-box"><div class="num" id="statTotal">0</div><div class="lbl">總單字數</div></div>
+        <div class="panel stat-box"><div class="num" id="statMastered">0</div><div class="lbl">已精熟</div></div>
+        <div class="panel stat-box"><div class="num" id="statStreak">0</div><div class="lbl">連續學習天數</div></div>
+        <div class="panel stat-box"><div class="num" id="statAccuracy">0%</div><div class="lbl">近 7 天正確率</div></div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="section-title">📈 每日複習量（近 14 天）</div>
+        <div class="chart-wrap"><svg id="chartDaily" width="100%" height="160" viewBox="0 0 700 160" preserveAspectRatio="xMinYMid meet"></svg></div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="section-title">🎯 正確率趨勢（近 14 天）</div>
+          <div class="chart-wrap"><svg id="chartAccuracy" width="100%" height="140" viewBox="0 0 340 140" preserveAspectRatio="xMinYMid meet"></svg></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">🏷️ CEFR 等級分布</div>
+          <div class="chart-wrap"><svg id="chartCefr" width="100%" height="140" viewBox="0 0 340 140" preserveAspectRatio="xMinYMid meet"></svg></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="section-title">⚠️ 常錯單字（不熟 ≥ 2 次）</div>
+        <div id="wrongList"></div>
+        <div class="empty-hint" id="wrongEmptyHint" style="display:none;">目前沒有常錯單字，繼續保持！</div>
+      </div>
+    </section>
+
+    <!-- ============ SETTINGS VIEW ============ -->
+    <section class="view" id="view-settings">
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="section-title">🎯 每日目標</div>
+        <div class="settings-row">
+          <div><div class="lab">每日複習張數目標</div><div class="sub">達成後會計入連續學習天數</div></div>
+          <input type="number" id="dailyGoalInput" min="1" style="width:90px;">
+        </div>
+        <div class="settings-row">
+          <div><div class="lab">今日進度</div></div>
+          <div class="mono" id="todayProgressText">0 / 0</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="section-title">🔊 發音偏好</div>
+        <div class="settings-row">
+          <div><div class="lab">預設腔調</div><div class="sub">翻卡自動播放使用的口音</div></div>
+          <select id="defaultAccent">
+            <option value="UK">🇬🇧 英式</option>
+            <option value="US">🇺🇸 美式</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <div><div class="lab">翻面自動發音</div></div>
+          <input type="checkbox" id="autoSpeak" style="width:18px;height:18px;">
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="section-title">💾 資料備份</div>
+        <div class="settings-row">
+          <div><div class="lab">匯出備份</div><div class="sub">將所有單字與複習紀錄匯出為 JSON 檔</div></div>
+          <button class="btn btn-sm" id="btnExport">⬇️ 匯出 JSON</button>
+        </div>
+        <div class="settings-row">
+          <div><div class="lab">匯入備份</div><div class="sub">從 JSON 檔還原資料（會合併現有字庫）</div></div>
+          <button class="btn btn-sm" id="btnImportBackup">⬆️ 選擇檔案</button>
+          <input type="file" id="fileImportBackup" accept="application/json" style="display:none;">
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">🗑️ 危險區域</div>
+        <div class="settings-row">
+          <div><div class="lab">清除所有資料</div><div class="sub">刪除全部單字、複習紀錄與設定，無法復原</div></div>
+          <button class="btn btn-sm btn-danger" id="btnClearAll">清除全部資料</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Bottom tab bar (mobile) -->
+<nav class="tabbar" id="tabbar">
+  <button data-tab="review" class="active"><span class="ic">📖</span>複習</button>
+  <button data-tab="library"><span class="ic">📚</span>字庫</button>
+  <button data-tab="stats"><span class="ic">📊</span>統計</button>
+  <button data-tab="settings"><span class="ic">⚙️</span>設定</button>
+</nav>
+
+<!-- Add/Edit word modal -->
+<div class="modal-bg" id="wordModalBg">
+  <div class="modal">
+    <h2 id="wordModalTitle">新增單字</h2>
+    <div class="field"><label>英文單字 *</label><input type="text" id="fEnglish"></div>
+    <div class="grid grid-2">
+      <div class="field"><label>IPA（英式）</label><input type="text" id="fIpaUK" placeholder="/ə/"></div>
+      <div class="field"><label>IPA（美式）</label><input type="text" id="fIpaUS" placeholder="/ə/"></div>
+    </div>
+    <div class="field"><label>中文意思 *</label><input type="text" id="fChinese"></div>
+    <div class="field"><label>搭配詞</label><input type="text" id="fCollo"></div>
+    <div class="field"><label>例句</label><textarea id="fExample"></textarea></div>
+    <div class="grid grid-2">
+      <div class="field"><label>CEFR 等級</label>
+        <select id="fCefr">
+          <option value="">未分類</option>
+          <option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option>
+        </select>
+      </div>
+      <div class="field"><label>標籤（逗號分隔）</label><input type="text" id="fTags" placeholder="商業, 動詞"></div>
+    </div>
+    <div class="field"><label>筆記</label><textarea id="fNotes"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="wordModalCancel">取消</button>
+      <button class="btn btn-primary" id="wordModalSave">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import modal -->
+<div class="modal-bg" id="importModalBg">
+  <div class="modal">
+    <h2>批次匯入單字</h2>
+    <div class="hint-box">
+      直接貼上即可，格式會<b>自動偵測</b>，支援三種來源：<br>
+      · <b>Notion 條列格式</b>——直接從 Notion 複製整段（<span class="mono">- 單字，詞性，CEFR</span> 開頭，含中文、搭配詞、例句）<br>
+      · <b>簡易格式</b>：<span class="mono">英文 | 中文</span><br>
+      · <b>完整格式</b>：<span class="mono">英文 | IPA英式 | IPA美式 | 中文 | 搭配詞 | 例句 | CEFR</span>
+    </div>
+    <div class="field"><textarea id="importText" style="min-height:220px;" placeholder="在此貼上單字清單（可直接從 Notion 複製整段貼上）…"></textarea></div>
+    <div class="modal-actions">
+      <span id="importPreviewCount" class="mono" style="margin-right:auto;color:var(--muted);font-size:13px;"></span>
+      <button class="btn btn-ghost" id="importCancel">取消</button>
+      <button class="btn btn-primary" id="importConfirm">匯入</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ======================================================================
+   資料庫層 — IndexedDB
+====================================================================== */
+const DB_NAME = 'VocabSRS_DB';
+const DB_VERSION = 1;
+let db = null;
+
+function openDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const _db = e.target.result;
+      if(!_db.objectStoreNames.contains('words')){
+        const ws = _db.createObjectStore('words', { keyPath:'id', autoIncrement:true });
+        ws.createIndex('cefr', 'cefr');
+      }
+      if(!_db.objectStoreNames.contains('reviewLogs')){
+        const rs = _db.createObjectStore('reviewLogs', { keyPath:'id', autoIncrement:true });
+        rs.createIndex('date', 'date');
+        rs.createIndex('wordId', 'wordId');
+      }
+      if(!_db.objectStoreNames.contains('settings')){
+        _db.createObjectStore('settings', { keyPath:'key' });
+      }
+    };
+    req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+    req.onerror = (e) => reject(e);
+  });
+}
+
+function tx(storeNames, mode='readonly'){
+  return db.transaction(storeNames, mode);
+}
+function storeReq(store, method, ...args){
+  return new Promise((resolve, reject) => {
+    const r = store[method](...args);
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function dbGetAllWords(){
+  const t = tx('words');
+  return storeReq(t.objectStore('words'), 'getAll');
+}
+async function dbAddWord(word){
+  const t = tx('words', 'readwrite');
+  return storeReq(t.objectStore('words'), 'add', word);
+}
+async function dbPutWord(word){
+  const t = tx('words', 'readwrite');
+  return storeReq(t.objectStore('words'), 'put', word);
+}
+async function dbDeleteWord(id){
+  const t = tx('words', 'readwrite');
+  return storeReq(t.objectStore('words'), 'delete', id);
+}
+async function dbAddLog(log){
+  const t = tx('reviewLogs', 'readwrite');
+  return storeReq(t.objectStore('reviewLogs'), 'add', log);
+}
+async function dbGetAllLogs(){
+  const t = tx('reviewLogs');
+  return storeReq(t.objectStore('reviewLogs'), 'getAll');
+}
+async function dbGetSetting(key, fallback){
+  const t = tx('settings');
+  const r = await storeReq(t.objectStore('settings'), 'get', key);
+  return r ? r.value : fallback;
+}
+async function dbSetSetting(key, value){
+  const t = tx('settings', 'readwrite');
+  return storeReq(t.objectStore('settings'), 'put', { key, value });
+}
+async function dbClearAll(){
+  const t = tx(['words','reviewLogs','settings'], 'readwrite');
+  await storeReq(t.objectStore('words'), 'clear');
+  await storeReq(t.objectStore('reviewLogs'), 'clear');
+  await storeReq(t.objectStore('settings'), 'clear');
+}
+
+/* ======================================================================
+   全域狀態
+====================================================================== */
+let WORDS = [];          // 全部單字（快取）
+let LOGS = [];           // 全部複習紀錄（快取）
+let sessionQueue = [];   // 目前複習牌組（單字 id 陣列，含重複插入）
+let sessionMasteredIds = new Set();
+let sessionTotalStart = 0;
+let currentWordId = null;
+let isFlipped = false;
+let settings = { dailyGoal: 20, defaultAccent: 'UK', autoSpeak: false };
+
+const todayStr = () => new Date().toISOString().slice(0,10);
+const uid = () => Math.random().toString(36).slice(2,9);
+
+/* ======================================================================
+   初始化
+====================================================================== */
+async function init(){
+  await openDB();
+  WORDS = await dbGetAllWords();
+  LOGS = await dbGetAllLogs();
+  settings.dailyGoal = await dbGetSetting('dailyGoal', 20);
+  settings.defaultAccent = await dbGetSetting('defaultAccent', 'UK');
+  settings.autoSpeak = await dbGetSetting('autoSpeak', false);
+
+  bindNav();
+  bindReview();
+  bindLibrary();
+  bindSettings();
+  bindModals();
+
+  refreshFilters();
+  buildSessionQueue();
+  renderReview();
+  renderLibrary();
+  renderStats();
+  renderSettings();
+  updateStreakChip();
+}
+window.addEventListener('DOMContentLoaded', init);
+
+/* ======================================================================
+   導覽（分頁切換）
+====================================================================== */
+const TAB_TITLES = { review:'📖 複習', library:'📚 字庫', stats:'📊 統計', settings:'⚙️ 設定' };
+function bindNav(){
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+}
+function switchTab(tab){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab===tab));
+  document.getElementById('pageTitle').textContent = TAB_TITLES[tab];
+  if(tab==='stats') renderStats();
+  if(tab==='library') renderLibrary();
+  if(tab==='settings') renderSettings();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ======================================================================
+   SRS 邏輯
+   - word.box: 1~5（萊特納盒子等級，影響下次到期日）
+   - word.nextReview: 到期日期字串 (YYYY-MM-DD)，null/過去=今日到期
+   - 同一複習場次內：OK 往後插入 10 張、Not OK 往後插入 5 張，維持你原本的節奏
+   - Easy：移出場次佇列，並依 box 拉長到期天數
+====================================================================== */
+const BOX_INTERVAL_DAYS = { 1:1, 2:2, 3:4, 4:8, 5:16 };
+
+function isDue(word){
+  if(!word.nextReview) return true;
+  return word.nextReview <= todayStr();
+}
+
+function getFilteredPool(){
+  const cefrVal = document.getElementById('filterCefr').value;
+  const tagVal = document.getElementById('filterTag').value;
+  const onlyWrong = document.getElementById('filterWrong').checked;
+  return WORDS.filter(w => {
+    if(cefrVal!=='all' && w.cefr!==cefrVal) return false;
+    if(tagVal!=='all' && !(w.tags||[]).includes(tagVal)) return false;
+    if(onlyWrong && (w.wrongCount||0) < 2) return false;
+    return true;
+  });
+}
+
+function buildSessionQueue(){
+  const pool = getFilteredPool().filter(isDue);
+  sessionQueue = pool.map(w => w.id);
+  sessionMasteredIds = new Set();
+  sessionTotalStart = sessionQueue.length;
+  currentWordId = null;
+  isFlipped = false;
+}
+
+function currentWord(){
+  return WORDS.find(w => w.id === currentWordId);
+}
+
+function pullNextCard(){
+  if(sessionQueue.length===0){ currentWordId = null; return; }
+  currentWordId = sessionQueue.shift();
+  isFlipped = false;
+}
+
+async function gradeCurrent(result){
+  const w = currentWord();
+  if(!w) return;
+
+  w.reviewCount = (w.reviewCount||0) + 1;
+  w.lastReviewed = new Date().toISOString();
+
+  if(result === 'notok'){
+    w.box = 1;
+    w.wrongCount = (w.wrongCount||0) + 1;
+    w.correctStreak = 0;
+    // 場次內：往後插入第 5 張之後
+    insertIntoQueue(w.id, 5);
+    w.nextReview = todayStr(); // 仍在今天到期，直到場次內練熟
+  } else if(result === 'ok'){
+    w.correctStreak = (w.correctStreak||0) + 1;
+    insertIntoQueue(w.id, 10);
+    w.nextReview = todayStr();
+  } else if(result === 'easy'){
+    w.box = Math.min(5, (w.box||1) + 1);
+    w.correctStreak = (w.correctStreak||0) + 1;
+    const days = BOX_INTERVAL_DAYS[w.box] || 16;
+    const d = new Date(); d.setDate(d.getDate() + days);
+    w.nextReview = d.toISOString().slice(0,10);
+    sessionMasteredIds.add(w.id);
+  }
+
+  await dbPutWord(w);
+  await dbAddLog({ wordId:w.id, date:todayStr(), timestamp:Date.now(), result });
+  LOGS = await dbGetAllLogs();
+
+  pullNextCard();
+  renderReview();
+  updateStreakChip();
+}
+
+function insertIntoQueue(wordId, offset){
+  const pos = Math.min(offset, sessionQueue.length);
+  sessionQueue.splice(pos, 0, wordId);
+}
+
+/* ======================================================================
+   複習畫面渲染 & 綁定
+====================================================================== */
+function bindReview(){
+  document.getElementById('btnBuildDeck').addEventListener('click', () => {
+    buildSessionQueue();
+    pullNextCard();
+    renderReview();
+  });
+  document.getElementById('flipWrap').addEventListener('click', toggleFlip);
+
+  document.addEventListener('keydown', (e) => {
+    if(!document.getElementById('view-review').classList.contains('active')) return;
+    if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+    if(!currentWordId) return;
+    if(e.code === 'Space'){ e.preventDefault(); toggleFlip(); }
+    else if(e.code === 'Enter'){ e.preventDefault(); speakCurrent(settings.defaultAccent); }
+    else if(e.key === '1' && isFlipped){ gradeCurrent('notok'); }
+    else if(e.key === '2' && isFlipped){ gradeCurrent('ok'); }
+    else if(e.key === '3' && isFlipped){ gradeCurrent('easy'); }
+  });
+}
+
+function toggleFlip(){
+  if(!currentWordId) return;
+  isFlipped = !isFlipped;
+  document.getElementById('flipCard').classList.toggle('flipped', isFlipped);
+  document.getElementById('gradeRow').classList.toggle('show', isFlipped);
+  if(isFlipped && settings.autoSpeak) speakCurrent(settings.defaultAccent);
+}
+
+function cefrClass(cefr){
+  if(!cefr) return 'cefr-none';
+  if(cefr.startsWith('A')) return 'cefr-A';
+  if(cefr.startsWith('B')) return 'cefr-B';
+  if(cefr.startsWith('C')) return 'cefr-C';
+  return 'cefr-none';
+}
+
+function renderReview(){
+  const hasAnyWords = WORDS.length > 0;
+  const stage = document.getElementById('cardStage');
+  const emptyLib = document.getElementById('reviewEmpty');
+  const done = document.getElementById('reviewDone');
+
+  if(!hasAnyWords){
+    stage.style.display='none'; done.style.display='none'; emptyLib.style.display='block';
+    return;
+  }
+  emptyLib.style.display='none';
+
+  if(!currentWordId && sessionQueue.length===0){
+    stage.style.display='none'; done.style.display='block';
+    return;
+  }
+  done.style.display='none'; stage.style.display='flex';
+
+  if(!currentWordId) pullNextCard();
+  const w = currentWord();
+  if(!w){ stage.style.display='none'; done.style.display='block'; return; }
+
+  document.getElementById('flipCard').classList.remove('flipped');
+  document.getElementById('gradeRow').classList.remove('show');
+  isFlipped = false;
+
+  const no = String(w.id).padStart(3,'0');
+  document.getElementById('catNoFront').textContent = 'No. '+no;
+  document.getElementById('catNoBack').textContent = 'No. '+no;
+  document.getElementById('frontWord').textContent = w.english;
+  document.getElementById('frontIpa').textContent = [w.ipaUK, w.ipaUS].filter(Boolean).join('   ');
+  const fc = document.getElementById('frontCefr');
+  fc.textContent = w.cefr || '';
+  fc.className = 'cefr ' + cefrClass(w.cefr);
+  fc.style.display = w.cefr ? 'inline-flex' : 'none';
+
+  document.getElementById('backWord').textContent = w.english;
+  document.getElementById('backZh').textContent = w.chinese;
+  document.getElementById('backCollo').textContent = w.collocations || '（無）';
+  document.getElementById('backExample').textContent = w.example || '（無例句）';
+
+  const remaining = sessionQueue.length + 1;
+  document.getElementById('progressText').textContent = `剩餘 ${remaining} / ${sessionTotalStart||remaining}`;
+  const pct = sessionTotalStart ? Math.round((1 - remaining/Math.max(sessionTotalStart, remaining)) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('masteredText').textContent = '已精熟 '+sessionMasteredIds.size;
+}
+
+function speakCurrent(accent){
+  const w = currentWord();
+  if(!w) return;
+  speakText(w.english, accent);
+}
+function speakText(text, accent){
+  if(!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = accent === 'US' ? 'en-US' : 'en-GB';
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang === utter.lang);
+  if(preferred) utter.voice = preferred;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utter);
+}
+
+/* ======================================================================
+   篩選器（CEFR / 標籤）
+====================================================================== */
+function refreshFilters(){
+  const cefrSel = document.getElementById('filterCefr');
+  const tagSel = document.getElementById('filterTag');
+  const cefrs = [...new Set(WORDS.map(w=>w.cefr).filter(Boolean))].sort();
+  const tags = [...new Set(WORDS.flatMap(w=>w.tags||[]))].sort();
+
+  cefrSel.innerHTML = '<option value="all">全部 CEFR</option>' + cefrs.map(c=>`<option value="${c}">${c}</option>`).join('');
+  tagSel.innerHTML = '<option value="all">全部標籤</option>' + tags.map(t=>`<option value="${t}">${t}</option>`).join('');
+
+  const pills = document.getElementById('cefrPills');
+  const allCefrs = ['A1','A2','B1','B2','C1','C2'];
+  pills.innerHTML = ['全部', ...allCefrs].map(c =>
+    `<button class="pill ${c==='全部'?'active':''}" data-cefr="${c==='全部'?'all':c}">${c}</button>`
+  ).join('');
+  pills.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      pills.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+      p.classList.add('active');
+      renderLibrary();
+    });
+  });
+}
+
+/* ======================================================================
+   字庫畫面
+====================================================================== */
+function bindLibrary(){
+  document.getElementById('searchWord').addEventListener('input', renderLibrary);
+  document.getElementById('btnAddWord').addEventListener('click', () => openWordModal(null));
+  document.getElementById('btnImport').addEventListener('click', openImportModal);
+}
+
+function renderLibrary(){
+  const q = (document.getElementById('searchWord').value||'').trim().toLowerCase();
+  const activePill = document.querySelector('#cefrPills .pill.active');
+  const cefrFilter = activePill ? activePill.dataset.cefr : 'all';
+
+  let list = WORDS.slice().sort((a,b)=> a.english.localeCompare(b.english));
+  if(q) list = list.filter(w => w.english.toLowerCase().includes(q) || (w.chinese||'').includes(q));
+  if(cefrFilter && cefrFilter!=='all') list = list.filter(w => w.cefr === cefrFilter);
+
+  const container = document.getElementById('wordList');
+  const emptyHint = document.getElementById('libEmptyHint');
+  if(list.length===0){ container.innerHTML=''; emptyHint.style.display='block'; return; }
+  emptyHint.style.display='none';
+
+  container.innerHTML = list.map(w => `
+    <div class="word-row">
+      <span class="we">${escapeHtml(w.english)}</span>
+      <span class="cefr ${cefrClass(w.cefr)}">${w.cefr||'—'}</span>
+      <span class="wz">${escapeHtml(w.chinese||'')}</span>
+      <span class="wmeta">複習${w.reviewCount||0}次 · 錯${w.wrongCount||0}次</span>
+      <button class="wdel" title="編輯" onclick="openWordModal(${w.id})">✏️</button>
+      <button class="wdel" title="刪除" onclick="deleteWord(${w.id})">🗑️</button>
+    </div>
+  `).join('');
+
+  refreshFilters.calledOnce || (refreshFilters.calledOnce = true);
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function deleteWord(id){
+  if(!confirm('確定要刪除這個單字嗎？')) return;
+  await dbDeleteWord(id);
+  WORDS = WORDS.filter(w => w.id !== id);
+  sessionQueue = sessionQueue.filter(x => x !== id);
+  refreshFilters();
+  renderLibrary();
+  renderReview();
+  renderStats();
+  showToast('已刪除單字');
+}
+
+/* ---------- 新增/編輯單字 Modal ---------- */
+let editingWordId = null;
+function bindModals(){
+  document.getElementById('wordModalCancel').addEventListener('click', closeWordModal);
+  document.getElementById('wordModalSave').addEventListener('click', saveWordModal);
+  document.getElementById('wordModalBg').addEventListener('click', (e)=>{ if(e.target.id==='wordModalBg') closeWordModal(); });
+
+  document.getElementById('importCancel').addEventListener('click', closeImportModal);
+  document.getElementById('importConfirm').addEventListener('click', confirmImport);
+  document.getElementById('importModalBg').addEventListener('click', (e)=>{ if(e.target.id==='importModalBg') closeImportModal(); });
+  document.getElementById('importText').addEventListener('input', updateImportPreview);
+}
+
+function openWordModal(id){
+  editingWordId = id;
+  const w = id ? WORDS.find(x=>x.id===id) : null;
+  document.getElementById('wordModalTitle').textContent = id ? '編輯單字' : '新增單字';
+  document.getElementById('fEnglish').value = w?.english || '';
+  document.getElementById('fIpaUK').value = w?.ipaUK || '';
+  document.getElementById('fIpaUS').value = w?.ipaUS || '';
+  document.getElementById('fChinese').value = w?.chinese || '';
+  document.getElementById('fCollo').value = w?.collocations || '';
+  document.getElementById('fExample').value = w?.example || '';
+  document.getElementById('fCefr').value = w?.cefr || '';
+  document.getElementById('fTags').value = (w?.tags||[]).join(', ');
+  document.getElementById('fNotes').value = w?.notes || '';
+  document.getElementById('wordModalBg').classList.add('show');
+}
+function closeWordModal(){ document.getElementById('wordModalBg').classList.remove('show'); }
+
+async function saveWordModal(){
+  const english = document.getElementById('fEnglish').value.trim();
+  const chinese = document.getElementById('fChinese').value.trim();
+  if(!english || !chinese){ showToast('英文與中文為必填'); return; }
+  const tags = document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+
+  const data = {
+    english, chinese,
+    ipaUK: document.getElementById('fIpaUK').value.trim(),
+    ipaUS: document.getElementById('fIpaUS').value.trim(),
+    collocations: document.getElementById('fCollo').value.trim(),
+    example: document.getElementById('fExample').value.trim(),
+    cefr: document.getElementById('fCefr').value,
+    tags,
+    notes: document.getElementById('fNotes').value.trim(),
+  };
+
+  if(editingWordId){
+    const w = WORDS.find(x=>x.id===editingWordId);
+    Object.assign(w, data);
+    await dbPutWord(w);
+  } else {
+    const w = { ...data, box:1, nextReview:null, reviewCount:0, wrongCount:0, correctStreak:0, lastReviewed:null, createdAt:new Date().toISOString() };
+    const id = await dbAddWord(w);
+    w.id = id;
+    WORDS.push(w);
+  }
+  closeWordModal();
+  refreshFilters();
+  renderLibrary();
+  renderReview();
+  renderStats();
+  showToast('已儲存');
+}
+
+/* ---------- 批次匯入 Modal（格式自動偵測） ---------- */
+function openImportModal(){
+  document.getElementById('importText').value = '';
+  updateImportPreview();
+  document.getElementById('importModalBg').classList.add('show');
+}
+function closeImportModal(){ document.getElementById('importModalBg').classList.remove('show'); }
+
+const CEFR_RE = /^[ABC][12]$/i;
+// Notion 條列標頭：- 單字，詞性，CEFR
+const NOTION_HEADER_RE = /^-\s*(.+?)，(.+?)，([^，]+)\s*$/;
+
+function stripMd(s){
+  return (s||'').replace(/\*\*/g,'').replace(/^\*|\*$/g,'').trim();
+}
+
+/** 解析從 Notion 複製貼上的條列格式（- 單字，詞性，CEFR / 中文＋搭配詞 / 例句 / 中文翻譯） */
+function parseNotionPaste(text){
+  const rawLines = text.split('\n');
+  const lines = rawLines.map(l => l.trim());
+  const headerIdx = [];
+  lines.forEach((l,i) => {
+    const m = l.match(NOTION_HEADER_RE);
+    if(m && CEFR_RE.test(m[3].trim())) headerIdx.push(i);
+  });
+  if(headerIdx.length === 0) return null;
+
+  const items = [];
+  headerIdx.forEach((startIdx, k) => {
+    const endIdx = k+1 < headerIdx.length ? headerIdx[k+1] : lines.length;
+    const header = lines[startIdx].match(NOTION_HEADER_RE);
+    const english = header[1].trim();
+    const pos = header[2].trim();
+    const cefr = header[3].trim().toUpperCase();
+
+    let meaningLine = null, exampleEn = null, exampleZh = null;
+    const noteLines = [];
+
+    for(let i = startIdx+1; i < endIdx; i++){
+      const line = lines[i];
+      if(!line) continue;
+      if(line.startsWith('-')){
+        const noteText = line.replace(/^-+\s*/, '').trim();
+        if(noteText) noteLines.push(noteText);
+        continue;
+      }
+      if(/^\*?例句[：:]/.test(line)){
+        exampleEn = stripMd(line.replace(/^\*?例句[：:]\*?/, ''));
+        continue;
+      }
+      if(/搭配詞[：:]/.test(line)){
+        meaningLine = line;
+        continue;
+      }
+      if(exampleEn && !exampleZh && /[\u4e00-\u9fff]/.test(line)){
+        exampleZh = line;
+        continue;
+      }
+      if(!meaningLine){
+        meaningLine = line;
+      }
+    }
+
+    let chinese = '', collocations = '';
+    if(meaningLine){
+      const parts = meaningLine.split(/搭配詞[：:]/);
+      chinese = parts[0].replace(/，\s*$/, '').trim();
+      collocations = parts[1] ? parts[1].trim() : '';
+    }
+    const example = [exampleEn, exampleZh].filter(Boolean).join('\n');
+
+    items.push({
+      english, chinese, collocations, example, cefr,
+      tags: pos ? [pos] : [],
+      notes: noteLines.join('；'),
+    });
+  });
+  return items;
+}
+
+/** 解析「|」分隔格式，每行依欄位數自動判斷為簡易或完整格式 */
+function parsePipeFormat(text){
+  const items = text.split('\n').map(l=>l.trim()).filter(Boolean).map(line => {
+    if(!line.includes('|')) return null;
+    const parts = line.split('|').map(p=>p.trim());
+    if(parts.length >= 7){
+      return {
+        english:parts[0], ipaUK:parts[1]||'', ipaUS:parts[2]||'', chinese:parts[3]||'',
+        collocations:parts[4]||'', example:parts[5]||'', cefr:parts[6]||'',
+        tags:(parts[7]||'').split(',').map(t=>t.trim()).filter(Boolean),
+      };
+    }
+    if(parts.length >= 2){
+      return { english:parts[0], chinese:parts[1] };
+    }
+    return null;
+  }).filter(Boolean);
+  return items.length ? items : null;
+}
+
+/** 自動偵測貼上的內容格式，回傳 { items, formatLabel } */
+function parseImportAuto(text){
+  if(!text.trim()) return { items: [], formatLabel: '' };
+  const notion = parseNotionPaste(text);
+  if(notion && notion.length) return { items: notion, formatLabel: 'Notion 條列格式' };
+  const pipe = parsePipeFormat(text);
+  if(pipe && pipe.length) return { items: pipe, formatLabel: '「|」分隔格式' };
+  return { items: [], formatLabel: '' };
+}
+
+function updateImportPreview(){
+  const { items, formatLabel } = parseImportAuto(document.getElementById('importText').value);
+  document.getElementById('importPreviewCount').textContent = items.length ? `偵測為${formatLabel}，共 ${items.length} 筆單字` : '';
+}
+async function confirmImport(){
+  const { items } = parseImportAuto(document.getElementById('importText').value);
+  if(items.length===0){ showToast('沒有偵測到有效的單字資料，請確認貼上內容'); return; }
+  for(const item of items){
+    const w = { box:1, nextReview:null, reviewCount:0, wrongCount:0, correctStreak:0, lastReviewed:null, createdAt:new Date().toISOString(), ipaUK:'', ipaUS:'', collocations:'', example:'', cefr:'', tags:[], notes:'', ...item };
+    const id = await dbAddWord(w);
+    w.id = id;
+    WORDS.push(w);
+  }
+  closeImportModal();
+  refreshFilters();
+  renderLibrary();
+  renderReview();
+  renderStats();
+  showToast(`已匯入 ${items.length} 筆單字`);
+}
+
+/* ======================================================================
+   統計畫面
+====================================================================== */
+function last14Dates(){
+  const arr = [];
+  for(let i=13;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    arr.push(d.toISOString().slice(0,10));
+  }
+  return arr;
+}
+
+function computeStreak(){
+  const dates = new Set(LOGS.map(l=>l.date));
+  let streak = 0;
+  let d = new Date();
+  while(true){
+    const s = d.toISOString().slice(0,10);
+    if(dates.has(s)){ streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderStats(){
+  const total = WORDS.length;
+  const mastered = WORDS.filter(w => (w.box||1) >= 5).length;
+  const streak = computeStreak();
+
+  const last7 = last14Dates().slice(-7);
+  const logs7 = LOGS.filter(l => last7.includes(l.date));
+  const correct7 = logs7.filter(l => l.result!=='notok').length;
+  const acc = logs7.length ? Math.round(correct7/logs7.length*100) : 0;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statMastered').textContent = mastered;
+  document.getElementById('statStreak').textContent = streak;
+  document.getElementById('statAccuracy').textContent = acc + '%';
+  document.getElementById('statStreak').parentElement; // no-op guard
+
+  drawDailyChart();
+  drawAccuracyChart();
+  drawCefrChart();
+  renderWrongList();
+}
+
+function drawDailyChart(){
+  const dates = last14Dates();
+  const counts = dates.map(d => LOGS.filter(l=>l.date===d).length);
+  const max = Math.max(1, ...counts);
+  const svg = document.getElementById('chartDaily');
+  const W = 700, H = 160, padB = 22, padT = 10, barGap = 6;
+  const barW = (W - 20) / dates.length - barGap;
+  let s = '';
+  dates.forEach((d,i) => {
+    const h = (counts[i]/max) * (H - padB - padT);
+    const x = 10 + i*(barW+barGap);
+    const y = H - padB - h;
+    s += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="var(--teal)" opacity="0.85"></rect>`;
+    if(counts[i]>0) s += `<text x="${x+barW/2}" y="${y-4}" font-size="9" fill="var(--ink-soft)" text-anchor="middle">${counts[i]}</text>`;
+    s += `<text x="${x+barW/2}" y="${H-6}" font-size="8" fill="var(--muted)" text-anchor="middle">${d.slice(5)}</text>`;
+  });
+  svg.innerHTML = s;
+}
+
+function drawAccuracyChart(){
+  const dates = last14Dates();
+  const pts = dates.map(d => {
+    const logs = LOGS.filter(l=>l.date===d);
+    if(logs.length===0) return null;
+    const correct = logs.filter(l=>l.result!=='notok').length;
+    return Math.round(correct/logs.length*100);
+  });
+  const W=340,H=140,padL=26,padR=10,padT=14,padB=20;
+  const usableW = W-padL-padR, usableH = H-padT-padB;
+  const step = usableW/(dates.length-1);
+  let path='', dots='';
+  let started=false;
+  pts.forEach((v,i)=>{
+    if(v===null) return;
+    const x = padL + i*step;
+    const y = padT + usableH - (v/100)*usableH;
+    path += (started?'L':'M') + x.toFixed(1)+','+y.toFixed(1)+' ';
+    started = true;
+    dots += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.5" fill="var(--amber)"></circle>`;
+  });
+  let grid='';
+  [0,50,100].forEach(v=>{
+    const y = padT + usableH - (v/100)*usableH;
+    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--line)" stroke-width="1"></line>`;
+    grid += `<text x="2" y="${y+3}" font-size="8" fill="var(--muted)">${v}</text>`;
+  });
+  document.getElementById('chartAccuracy').innerHTML = grid + `<path d="${path}" fill="none" stroke="var(--amber)" stroke-width="2"></path>` + dots;
+}
+
+function drawCefrChart(){
+  const levels = ['A1','A2','B1','B2','C1','C2'];
+  const counts = levels.map(l => WORDS.filter(w=>w.cefr===l).length);
+  const max = Math.max(1, ...counts);
+  const colors = { A:'var(--sage)', B:'var(--amber)', C:'var(--coral)' };
+  const W=340,H=140,padB=20,padT=10;
+  const barGap=10;
+  const barW = (W-20)/levels.length - barGap;
+  let s='';
+  levels.forEach((l,i)=>{
+    const h = (counts[i]/max)*(H-padB-padT);
+    const x = 10+i*(barW+barGap);
+    const y = H-padB-h;
+    const c = colors[l[0]];
+    s += `<rect x="${x}" y="${y}" width="${barW}" height="${Math.max(h,counts[i]>0?4:0)}" rx="3" fill="${c}"></rect>`;
+    s += `<text x="${x+barW/2}" y="${y-4}" font-size="9" fill="var(--ink-soft)" text-anchor="middle">${counts[i]||''}</text>`;
+    s += `<text x="${x+barW/2}" y="${H-6}" font-size="9" fill="var(--muted)" text-anchor="middle">${l}</text>`;
+  });
+  document.getElementById('chartCefr').innerHTML = s;
+}
+
+function renderWrongList(){
+  const wrong = WORDS.filter(w => (w.wrongCount||0) >= 2).sort((a,b)=>(b.wrongCount||0)-(a.wrongCount||0));
+  const el = document.getElementById('wrongList');
+  const hint = document.getElementById('wrongEmptyHint');
+  if(wrong.length===0){ el.innerHTML=''; hint.style.display='block'; return; }
+  hint.style.display='none';
+  el.innerHTML = wrong.map(w => `
+    <div class="word-row">
+      <span class="we">${escapeHtml(w.english)}</span>
+      <span class="cefr ${cefrClass(w.cefr)}">${w.cefr||'—'}</span>
+      <span class="wz">${escapeHtml(w.chinese||'')}</span>
+      <span class="wmeta">錯 ${w.wrongCount} 次</span>
+    </div>
+  `).join('');
+}
+
+/* ======================================================================
+   設定畫面
+====================================================================== */
+function bindSettings(){
+  document.getElementById('dailyGoalInput').addEventListener('change', async (e) => {
+    settings.dailyGoal = Math.max(1, parseInt(e.target.value)||20);
+    await dbSetSetting('dailyGoal', settings.dailyGoal);
+    renderSettings(); updateStreakChip();
+  });
+  document.getElementById('defaultAccent').addEventListener('change', async (e) => {
+    settings.defaultAccent = e.target.value;
+    await dbSetSetting('defaultAccent', settings.defaultAccent);
+  });
+  document.getElementById('autoSpeak').addEventListener('change', async (e) => {
+    settings.autoSpeak = e.target.checked;
+    await dbSetSetting('autoSpeak', settings.autoSpeak);
+  });
+  document.getElementById('btnExport').addEventListener('click', exportBackup);
+  document.getElementById('btnImportBackup').addEventListener('click', () => document.getElementById('fileImportBackup').click());
+  document.getElementById('fileImportBackup').addEventListener('change', importBackupFile);
+  document.getElementById('btnClearAll').addEventListener('click', clearAllData);
+}
+
+function renderSettings(){
+  document.getElementById('dailyGoalInput').value = settings.dailyGoal;
+  document.getElementById('defaultAccent').value = settings.defaultAccent;
+  document.getElementById('autoSpeak').checked = settings.autoSpeak;
+  const todayCount = LOGS.filter(l=>l.date===todayStr()).length;
+  document.getElementById('todayProgressText').textContent = `${todayCount} / ${settings.dailyGoal}`;
+}
+
+function updateStreakChip(){
+  document.getElementById('streakNum').textContent = computeStreak();
+}
+
+async function exportBackup(){
+  const payload = { exportedAt: new Date().toISOString(), words: WORDS, reviewLogs: LOGS, settings };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vocab-srs-backup-${todayStr()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  showToast('已匯出備份');
+}
+
+function importBackupFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try{
+      const data = JSON.parse(ev.target.result);
+      const words = data.words || [];
+      for(const w of words){
+        const clean = { ...w }; delete clean.id;
+        const id = await dbAddWord(clean);
+        clean.id = id;
+        WORDS.push(clean);
+      }
+      if(data.settings){
+        if(data.settings.dailyGoal) await dbSetSetting('dailyGoal', data.settings.dailyGoal);
+        if(data.settings.defaultAccent) await dbSetSetting('defaultAccent', data.settings.defaultAccent);
+      }
+      settings.dailyGoal = await dbGetSetting('dailyGoal', 20);
+      settings.defaultAccent = await dbGetSetting('defaultAccent', 'UK');
+      refreshFilters(); renderLibrary(); renderReview(); renderStats(); renderSettings();
+      showToast(`已還原 ${words.length} 筆單字`);
+    }catch(err){
+      showToast('檔案格式錯誤，無法匯入');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+async function clearAllData(){
+  if(!confirm('確定要清除全部資料嗎？此動作無法復原。')) return;
+  if(!confirm('再次確認：這會刪除所有單字與複習紀錄。')) return;
+  await dbClearAll();
+  WORDS = []; LOGS = [];
+  settings = { dailyGoal:20, defaultAccent:'UK', autoSpeak:false };
+  refreshFilters(); renderLibrary(); renderReview(); renderStats(); renderSettings(); updateStreakChip();
+  showToast('已清除所有資料');
+}
+</script>
+</body>
+</html>
