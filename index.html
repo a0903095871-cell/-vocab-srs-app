@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#EEF1EA">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#12141b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23c1573d'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23c1573d'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E">
 <link rel="manifest" id="manifestLink">
 <script>
   // 內嵌 PWA manifest，讓「加入主畫面」有正確的名稱與圖示
@@ -16,10 +16,10 @@
     short_name: "字卡目錄",
     start_url: ".",
     display: "standalone",
-    background_color: "#EEF1EA",
-    theme_color: "#EEF1EA",
+    background_color: "#12141b",
+    theme_color: "#12141b",
     icons: [{
-      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232F6F5E'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E",
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23c1573d'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E文%3C/text%3E%3C/svg%3E",
       sizes: "192x192", type: "image/svg+xml"
     }]
   };
@@ -28,25 +28,25 @@
 <title>字卡目錄 · 英文單字複習系統</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EEF1EA;
-    --paper-line:#DDE3D6;
-    --card:#FFFDF8;
-    --ink:#23241F;
-    --ink-soft:#54574C;
-    --muted:#8B8E80;
-    --teal:#2F6F5E;
-    --teal-deep:#204F42;
-    --amber:#C98A2E;
-    --amber-bg:#FBEEDA;
-    --coral:#B3503A;
-    --coral-bg:#F8E4DD;
-    --sage:#4E7E4C;
-    --sage-bg:#E4EEDD;
-    --line:#D8DCCF;
-    --shadow: 0 1px 2px rgba(35,36,31,.06), 0 8px 24px -12px rgba(35,36,31,.18);
+    --paper:#12141b;
+    --paper-line:#1c2029;
+    --card:#1b1e28;
+    --ink:#ece5d6;
+    --ink-soft:#a2a8bc;
+    --muted:#6d7387;
+    --teal:#c1573d;
+    --teal-deep:#d5684d;
+    --amber:#c9a24a;
+    --amber-bg:rgba(201,162,74,.16);
+    --coral:#b8453f;
+    --coral-bg:rgba(184,69,63,.16);
+    --sage:#7fa06a;
+    --sage-bg:rgba(127,160,106,.16);
+    --line:#333a4c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
     --radius: 14px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
@@ -63,7 +63,7 @@
     min-height:100vh;
   }
   .mono{ font-family:'JetBrains Mono', monospace; }
-  .serif{ font-family:'Fraunces', serif; }
+  .serif{ font-family:'Shippori Mincho', serif; }
 
   button{ font-family:inherit; }
   ::selection{ background:var(--teal); color:#fff; }
@@ -83,7 +83,7 @@
     border-right:1px solid var(--line);
   }
   .brand{
-    font-family:'Fraunces', serif;
+    font-family:'Shippori Mincho', serif;
     font-weight:600;
     font-size:20px;
     letter-spacing:.01em;
@@ -101,7 +101,7 @@
   }
   .navlist button .ic{ font-size:17px; width:20px; text-align:center; }
   .navlist button.active{ background:var(--teal); color:#fff; }
-  .navlist button:not(.active):hover{ background:#E4E8DE; }
+  .navlist button:not(.active):hover{ background:#232734; }
   .side-foot{ margin-top:auto; padding:12px; font-size:12px; color:var(--muted); line-height:1.6; }
 
   main{ flex:1; min-width:0; padding:20px 16px calc(84px + var(--safe-bottom)); }
@@ -115,7 +115,7 @@
     margin-bottom:18px;
   }
   .topbar h1{
-    font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin:0;
+    font-family:'Shippori Mincho', serif; font-size:22px; font-weight:600; margin:0;
     display:flex; align-items:center; gap:10px;
   }
   .streak-chip{
@@ -132,7 +132,7 @@
     background:var(--card);
     border-top:1px solid var(--line);
     padding:8px 6px calc(8px + var(--safe-bottom));
-    box-shadow:0 -6px 18px -10px rgba(35,36,31,.25);
+    box-shadow:0 -6px 18px -10px rgba(0,0,0,.45);
   }
   @media (min-width:768px){ .tabbar{ display:none; } }
   .tabbar button{
@@ -169,7 +169,7 @@
     box-shadow:var(--shadow); padding:18px;
   }
   .section-title{
-    font-family:'Fraunces', serif; font-size:16px; font-weight:600; margin:0 0 12px;
+    font-family:'Shippori Mincho', serif; font-size:16px; font-weight:600; margin:0 0 12px;
     display:flex; align-items:center; gap:8px; color:var(--ink);
   }
   .grid{ display:grid; gap:14px; }
@@ -187,7 +187,7 @@
   .cefr-A{ background:var(--sage-bg); color:var(--sage); }
   .cefr-B{ background:var(--amber-bg); color:var(--amber); }
   .cefr-C{ background:var(--coral-bg); color:var(--coral); }
-  .cefr-none{ background:#EEE; color:#999; }
+  .cefr-none{ background:rgba(255,255,255,.08); color:var(--muted); }
 
   /* ================= REVIEW TAB ================= */
   .review-toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
@@ -225,10 +225,10 @@
   .punch{ position:absolute; top:16px; left:16px; width:14px; height:14px; border-radius:50%; background:var(--paper); border:1px solid var(--line); box-shadow:inset 0 1px 2px rgba(0,0,0,.15); }
   .cat-no{ position:absolute; top:18px; right:20px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); }
   .face-front{ align-items:center; justify-content:center; text-align:center; gap:10px; }
-  .front-word{ font-family:'Fraunces', serif; font-weight:600; font-size:clamp(28px,7vw,42px); color:var(--ink); }
+  .front-word{ font-family:'Shippori Mincho', serif; font-weight:600; font-size:clamp(28px,7vw,42px); color:var(--ink); }
   .front-ipa{ font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:14px; }
   .front-hint{ margin-top:14px; font-size:12px; color:var(--muted); }
-  .face-back .back-word{ font-family:'Fraunces', serif; font-weight:600; font-size:22px; margin-bottom:6px; }
+  .face-back .back-word{ font-family:'Shippori Mincho', serif; font-weight:600; font-size:22px; margin-bottom:6px; }
   .back-zh{ font-size:20px; font-weight:700; margin-bottom:10px; }
   .back-block{ margin-bottom:10px; }
   .back-label{ font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
@@ -268,14 +268,14 @@
     display:flex; align-items:center; gap:12px; padding:12px 10px; border-bottom:1px solid var(--line);
   }
   .word-row:last-child{ border-bottom:none; }
-  .word-row .we{ font-family:'Fraunces',serif; font-weight:600; font-size:16px; min-width:100px; }
+  .word-row .we{ font-family:'Shippori Mincho',serif; font-weight:600; font-size:16px; min-width:100px; }
   .word-row .wz{ color:var(--ink-soft); font-size:14px; flex:1; }
   .word-row .wmeta{ font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; white-space:nowrap; }
   .word-row .wdel{ background:none; border:none; color:var(--coral); cursor:pointer; font-size:16px; padding:4px 6px; }
   .empty-hint{ text-align:center; padding:40px 10px; color:var(--muted); font-size:14px; }
 
   .modal-bg{
-    display:none; position:fixed; inset:0; background:rgba(35,36,31,.45); z-index:60;
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:60;
     align-items:flex-end; justify-content:center;
   }
   .modal-bg.show{ display:flex; }
@@ -285,7 +285,7 @@
     border-radius:18px 18px 0 0; padding:22px; box-shadow:0 -10px 30px rgba(0,0,0,.25);
   }
   @media (min-width:640px){ .modal{ border-radius:16px; } }
-  .modal h2{ font-family:'Fraunces',serif; font-size:18px; margin:0 0 14px; }
+  .modal h2{ font-family:'Shippori Mincho',serif; font-size:18px; margin:0 0 14px; }
   .field{ margin-bottom:12px; }
   .field label{ display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:4px; }
   .field input, .field select, .field textarea{ width:100%; }
@@ -307,14 +307,14 @@
   .settings-row .sub{ font-size:12px; color:var(--muted); margin-top:2px; }
   .toast{
     position:fixed; bottom:calc(90px + var(--safe-bottom)); left:50%; transform:translateX(-50%) translateY(20px);
-    background:var(--ink); color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600;
+    background:#2c303f; color:var(--ink); border:1px solid var(--line); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600;
     opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:80; white-space:nowrap;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   @media (min-width:768px){ .toast{ bottom:24px; } }
   .filter-pills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
   .pill{ border:1px solid var(--line); background:var(--card); border-radius:999px; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer; color:var(--ink-soft); }
-  .pill.active{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .pill.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
 </style>
 </head>
 <body>
@@ -325,6 +325,7 @@
     <div class="brand"><span class="dot"></span>字卡目錄</div>
     <ul class="navlist" id="sideNav">
       <li><button data-tab="review" class="active"><span class="ic">📖</span>複習</button></li>
+      <li><button data-tab="quiz"><span class="ic">📝</span>小考</button></li>
       <li><button data-tab="library"><span class="ic">📚</span>字庫</button></li>
       <li><button data-tab="stats"><span class="ic">📊</span>統計</button></li>
       <li><button data-tab="settings"><span class="ic">⚙️</span>設定</button></li>
@@ -412,6 +413,11 @@
       </div>
     </section>
 
+    <!-- ============ QUIZ VIEW（小考 / 文法練習） ============ -->
+    <section class="view" id="view-quiz">
+      <div id="quizBody"></div>
+    </section>
+
     <!-- ============ LIBRARY VIEW ============ -->
     <section class="view" id="view-library">
       <div class="lib-toolbar">
@@ -433,6 +439,15 @@
         <div class="panel stat-box"><div class="num" id="statMastered">0</div><div class="lbl">已精熟</div></div>
         <div class="panel stat-box"><div class="num" id="statStreak">0</div><div class="lbl">連續學習天數</div></div>
         <div class="panel stat-box"><div class="num" id="statAccuracy">0%</div><div class="lbl">近 7 天正確率</div></div>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="panel stat-box"><div class="num" id="statTodayTime" style="font-size:20px;">0 分鐘</div><div class="lbl">今日學習時間</div></div>
+        <div class="panel stat-box"><div class="num" id="statTotalTime" style="font-size:20px;">0 分鐘</div><div class="lbl">累積學習時間</div></div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="section-title">⏱️ 近 7 天學習時間</div>
+        <div id="chartTime" style="display:flex; align-items:flex-end; gap:10px; padding:10px 4px 0;"></div>
       </div>
 
       <div class="panel" style="margin-bottom:16px;">
@@ -682,21 +697,29 @@ async function init(){
   bindLibrary();
   bindSettings();
   bindModals();
+  bindQuiz();
 
   refreshFilters();
   buildSessionQueue();
+  loadAppSession();
   renderReview();
   renderLibrary();
   renderStats();
   renderSettings();
+  renderQuiz();
   updateStreakChip();
+  initStudyTimer();
+
+  window.addEventListener('beforeunload', persistAppSession);
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden) persistAppSession(); });
+  setInterval(persistAppSession, 4000);
 }
 window.addEventListener('DOMContentLoaded', init);
 
 /* ======================================================================
    導覽（分頁切換）
 ====================================================================== */
-const TAB_TITLES = { review:'📖 複習', library:'📚 字庫', stats:'📊 統計', settings:'⚙️ 設定' };
+const TAB_TITLES = { review:'📖 複習', quiz:'📝 小考', library:'📚 字庫', stats:'📊 統計', settings:'⚙️ 設定' };
 function bindNav(){
   document.querySelectorAll('[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
@@ -710,6 +733,246 @@ function switchTab(tab){
   if(tab==='stats') renderStats();
   if(tab==='library') renderLibrary();
   if(tab==='settings') renderSettings();
+  if(tab==='quiz') renderQuiz();
+  appSession.activeTab = tab;
+  persistAppSession();
+}
+
+/* ======================================================================
+   中途離開不中斷：儲存 / 還原目前的瀏覽進度（複習牌組 + 分頁 + 小考進度）
+====================================================================== */
+const APP_SESSION_KEY = 'vocabsrs_session_v1';
+const appSession = { activeTab: 'review' };
+function persistAppSession(){
+  try{
+    const snap = {
+      activeTab: appSession.activeTab,
+      review: { sessionQueue: sessionQueue.slice(), currentWordId, isFlipped, sessionMasteredIds:[...sessionMasteredIds] },
+      quiz: quizState.phase==='setup' ? { phase:'setup', tag:quizState.tag, count:quizState.count } : quizState,
+      savedAt: Date.now()
+    };
+    localStorage.setItem(APP_SESSION_KEY, JSON.stringify(snap));
+  }catch(e){ /* 儲存失敗時忽略 */ }
+}
+function loadAppSession(){
+  try{
+    const raw = localStorage.getItem(APP_SESSION_KEY);
+    if(!raw) return;
+    const snap = JSON.parse(raw);
+    if(!snap || typeof snap !== 'object') return;
+    const validIds = new Set(WORDS.map(w=>w.id));
+    if(snap.review && Array.isArray(snap.review.sessionQueue)){
+      const restoredQueue = snap.review.sessionQueue.filter(id=>validIds.has(id));
+      if(restoredQueue.length || (snap.review.currentWordId && validIds.has(snap.review.currentWordId))){
+        sessionQueue = restoredQueue;
+        currentWordId = (snap.review.currentWordId && validIds.has(snap.review.currentWordId)) ? snap.review.currentWordId : null;
+        isFlipped = !!snap.review.isFlipped;
+        sessionMasteredIds = new Set((snap.review.sessionMasteredIds||[]).filter(id=>validIds.has(id)));
+      }
+    }
+    if(snap.quiz) Object.assign(quizState, snap.quiz);
+    if(quizState.phase==='running' && (!quizState.pool || !quizState.pool.length)){
+      quizState.phase = 'setup';
+    }
+    if(snap.activeTab && TAB_TITLES[snap.activeTab]){
+      appSession.activeTab = snap.activeTab;
+      switchTab(snap.activeTab);
+    }
+    if(snap.savedAt && Date.now()-snap.savedAt < 1000*60*60*12){
+      showToast('已還原上次離開時的進度');
+    }
+  }catch(e){ /* 還原失敗時維持初始狀態 */ }
+}
+
+/* ======================================================================
+   學習時間統計
+====================================================================== */
+const TIME_LOG_KEY = 'vocabsrs_time_v1';
+function timeTodayKey(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function loadTimeLog(){ try{ return JSON.parse(localStorage.getItem(TIME_LOG_KEY)||'{}'); }catch(e){ return {}; } }
+function saveTimeLog(log){ try{ localStorage.setItem(TIME_LOG_KEY, JSON.stringify(log)); }catch(e){} }
+const studyTimer = { lastTick: Date.now() };
+function addStudyMs(ms){
+  if(ms<=0) return;
+  const log = loadTimeLog();
+  const key = timeTodayKey();
+  log[key] = (log[key]||0) + ms;
+  saveTimeLog(log);
+}
+function tickStudyTimer(){
+  const now = Date.now();
+  if(!document.hidden){
+    const delta = now - studyTimer.lastTick;
+    if(delta>0 && delta<20000) addStudyMs(delta);
+  }
+  studyTimer.lastTick = now;
+}
+function initStudyTimer(){
+  studyTimer.lastTick = Date.now();
+  setInterval(tickStudyTimer, 5000);
+  document.addEventListener('visibilitychange', tickStudyTimer);
+  window.addEventListener('beforeunload', tickStudyTimer);
+}
+function totalStudyMs(){ return Object.values(loadTimeLog()).reduce((a,b)=>a+b,0); }
+function todayStudyMs(){ return loadTimeLog()[timeTodayKey()] || 0; }
+function formatStudyMinutes(ms){
+  const mins = Math.round(ms/60000);
+  if(mins<60) return mins+' 分鐘';
+  return Math.floor(mins/60)+' 小時 '+(mins%60)+' 分';
+}
+function last7DaysStudyTime(){
+  const log = loadTimeLog();
+  const out = [];
+  for(let i=6;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    out.push({ key, label: d.toLocaleDateString('zh-TW',{weekday:'short'}), ms: log[key]||0 });
+  }
+  return out;
+}
+function renderTimeChart(){
+  const wrap = document.getElementById('chartTime');
+  if(!wrap) return;
+  const days = last7DaysStudyTime();
+  const maxMs = Math.max(1, ...days.map(d=>d.ms));
+  wrap.innerHTML = days.map(d=>{
+    const h = Math.max(4, Math.round(d.ms/maxMs*64));
+    return `<div style="display:flex; flex-direction:column; align-items:center; gap:6px; flex:1;">
+      <div title="${formatStudyMinutes(d.ms)}" style="width:100%; max-width:26px; height:${h}px; border-radius:6px 6px 2px 2px; background:${d.ms>0?'var(--teal)':'var(--line)'};"></div>
+      <span class="lbl" style="font-size:11px;">${d.label}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ======================================================================
+   小考（選擇題快速測驗，可用標籤篩選作為文法/詞性練習）
+====================================================================== */
+const quizState = { phase:'setup', tag:'all', count:10, pool:[], qIndex:0, score:0, answered:false, log:[] };
+function buildQuizPool(tagVal, count){
+  let items = WORDS.slice();
+  if(tagVal && tagVal!=='all') items = items.filter(w=>(w.tags||[]).includes(tagVal));
+  items = items.filter(w=>w.english && w.chinese);
+  items = items.sort(()=>Math.random()-0.5);
+  if(count!=='all') items = items.slice(0, Math.min(count, items.length));
+  return items.map(w=>{
+    const distractors = WORDS.filter(x=>x.id!==w.id && x.chinese && x.chinese!==w.chinese).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.chinese);
+    const options = [w.chinese, ...distractors].sort(()=>Math.random()-0.5);
+    return { id:w.id, english:w.english, chinese:w.chinese, options };
+  }).filter(q=>q.options.length>=2);
+}
+function allTagsList(){
+  const set = new Set();
+  WORDS.forEach(w=>(w.tags||[]).forEach(t=>set.add(t)));
+  return [...set].sort();
+}
+function bindQuiz(){ /* 事件於每次 render 時綁定，見 renderQuiz* 函式 */ }
+function renderQuiz(){
+  if(quizState.phase==='setup') return renderQuizSetup();
+  if(quizState.phase==='running') return renderQuizRunning();
+  if(quizState.phase==='done') return renderQuizDone();
+}
+function renderQuizSetup(){
+  const tags = allTagsList();
+  const maxAvail = quizState.tag==='all' ? WORDS.filter(w=>w.english&&w.chinese).length : WORDS.filter(w=>(w.tags||[]).includes(quizState.tag)).length;
+  document.getElementById('quizBody').innerHTML = `
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="section-title">📝 小考設定</div>
+      <div class="sub" style="font-size:13px;color:var(--muted);margin-bottom:12px;">選擇題自我測驗；用標籤篩選即可只練習特定詞性／文法類型的單字。</div>
+      <div class="lbl" style="margin-bottom:6px;">測驗範圍</div>
+      <div class="filter-pills">
+        <button class="pill${quizState.tag==='all'?' active':''}" data-qtag="all">全部（${WORDS.filter(w=>w.english&&w.chinese).length}）</button>
+        ${tags.map(t=>`<button class="pill${quizState.tag===t?' active':''}" data-qtag="${escapeHtml(t)}">${escapeHtml(t)}（${WORDS.filter(w=>(w.tags||[]).includes(t)).length}）</button>`).join('')}
+      </div>
+      <div class="lbl" style="margin:14px 0 6px;">題目數量</div>
+      <div class="filter-pills">
+        ${[10,20].map(n=>`<button class="pill${String(quizState.count)===String(n)?' active':''}" data-qcount="${n}">${n} 題</button>`).join('')}
+        <button class="pill${quizState.count==='all'?' active':''}" data-qcount="all">全部（最多 ${maxAvail}）</button>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" id="quizStartBtn" ${maxAvail<2?'disabled':''}>▶️ 開始小考</button>
+        ${maxAvail<2?`<div class="sub" style="font-size:12px;margin-top:8px;">此範圍單字量不足（至少需 2 筆），請先到字庫新增或匯入。</div>`:''}
+      </div>
+    </div>`;
+  document.querySelectorAll('[data-qtag]').forEach(btn=>btn.addEventListener('click', ()=>{ quizState.tag = btn.dataset.qtag; renderQuizSetup(); }));
+  document.querySelectorAll('[data-qcount]').forEach(btn=>btn.addEventListener('click', ()=>{ const v=btn.dataset.qcount; quizState.count = v==='all'?'all':Number(v); renderQuizSetup(); }));
+  const startBtn = document.getElementById('quizStartBtn');
+  if(startBtn) startBtn.addEventListener('click', ()=>{
+    quizState.pool = buildQuizPool(quizState.tag, quizState.count);
+    if(quizState.pool.length<2){ showToast('題庫不足，無法出題'); return; }
+    quizState.qIndex=0; quizState.score=0; quizState.answered=false; quizState.log=[];
+    quizState.phase='running';
+    renderQuiz();
+    persistAppSession();
+  });
+}
+function renderQuizRunning(){
+  const q = quizState;
+  const item = q.pool[q.qIndex];
+  document.getElementById('quizBody').innerHTML = `
+    <div class="panel">
+      <div class="progress-row" style="margin-bottom:14px;">
+        <span class="mono">第 ${q.qIndex+1} / ${q.pool.length} 題</span>
+        <div class="progress-track"><div class="progress-fill" style="width:${(q.qIndex/q.pool.length*100)}%;"></div></div>
+        <span class="mono">得分 ${q.score} / ${q.qIndex}</span>
+      </div>
+      <div style="text-align:center; margin-bottom:18px;">
+        <div class="lbl" style="margin-bottom:8px;">請選出正確的中文意思</div>
+        <div class="front-word" style="font-size:clamp(24px,6vw,34px);">${escapeHtml(item.english)}</div>
+      </div>
+      <div id="quizOptions" style="display:grid; gap:10px;">
+        ${item.options.map((opt,i)=>`<button class="btn" data-qopt="${i}" style="text-align:left; padding:12px 16px;"><b style="margin-right:8px;">${i+1}</b>${escapeHtml(opt)}</button>`).join('')}
+      </div>
+      <div style="margin-top:16px; text-align:right;"><button class="btn btn-primary" id="quizNextBtn" style="display:none;">${q.qIndex+1<q.pool.length?'下一題':'查看結果'} →</button></div>
+    </div>`;
+  const correctAnswer = item.chinese;
+  document.querySelectorAll('[data-qopt]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(q.answered) return;
+      q.answered = true;
+      const chosen = item.options[Number(btn.dataset.qopt)];
+      const isCorrect = chosen===correctAnswer;
+      if(isCorrect) q.score++;
+      document.querySelectorAll('[data-qopt]').forEach(b=>{
+        b.disabled = true;
+        const val = b.textContent.replace(/^\d+/,'').trim();
+        if(val===correctAnswer) b.style.borderColor='var(--sage)', b.style.color='var(--sage)';
+        else if(b===btn) b.style.borderColor='var(--coral)', b.style.color='var(--coral)';
+        else b.style.opacity='.5';
+      });
+      q.log.push({ english:item.english, correct:correctAnswer, chosen, isCorrect });
+      document.getElementById('quizNextBtn').style.display='inline-flex';
+      persistAppSession();
+    });
+  });
+  document.getElementById('quizNextBtn').addEventListener('click', ()=>{
+    q.answered=false;
+    if(q.qIndex+1<q.pool.length){ q.qIndex++; renderQuizRunning(); }
+    else{ q.phase='done'; renderQuizDone(); }
+    persistAppSession();
+  });
+}
+function renderQuizDone(){
+  const q = quizState;
+  const wrong = q.log.filter(l=>!l.isCorrect);
+  document.getElementById('quizBody').innerHTML = `
+    <div class="panel" style="text-align:center;">
+      <div class="section-title">📝 小考結果</div>
+      <div style="font-family:'Shippori Mincho',serif; font-size:44px; font-weight:700; margin:8px 0;">${q.score}<span style="font-size:20px; color:var(--muted);"> / ${q.pool.length}</span></div>
+      <div class="sub" style="margin-bottom:14px;">正確率 ${Math.round(q.score/q.pool.length*100)}%${wrong.length?`，${wrong.length} 題答錯`:'，全部答對！'}</div>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button class="btn btn-primary" id="quizRetryBtn">🔁 再測一次</button>
+        <button class="btn" id="quizBackBtn">回複習</button>
+      </div>
+    </div>
+    ${wrong.length?`<div class="panel" style="margin-top:14px;">
+      <div class="section-title">錯題複習</div>
+      ${wrong.map(w=>`<div class="settings-row"><div><div class="lab">${escapeHtml(w.english)}</div><div class="sub">你的答案：${escapeHtml(w.chosen)}</div></div><div style="color:var(--sage); font-weight:700;">${escapeHtml(w.correct)}</div></div>`).join('')}
+    </div>`:''}`;
+  document.getElementById('quizRetryBtn').addEventListener('click', ()=>{ quizState.phase='setup'; renderQuiz(); persistAppSession(); });
+  document.getElementById('quizBackBtn').addEventListener('click', ()=>switchTab('review'));
 }
 
 function showToast(msg){
@@ -799,6 +1062,7 @@ async function gradeCurrent(result){
   pullNextCard();
   renderReview();
   updateStreakChip();
+  persistAppSession();
 }
 
 function insertIntoQueue(wordId, offset){
@@ -814,6 +1078,7 @@ function bindReview(){
     buildSessionQueue();
     pullNextCard();
     renderReview();
+    persistAppSession();
   });
   document.getElementById('flipWrap').addEventListener('click', toggleFlip);
 
@@ -1220,6 +1485,9 @@ function renderStats(){
   document.getElementById('statStreak').textContent = streak;
   document.getElementById('statAccuracy').textContent = acc + '%';
   document.getElementById('statStreak').parentElement; // no-op guard
+  document.getElementById('statTodayTime').textContent = formatStudyMinutes(todayStudyMs());
+  document.getElementById('statTotalTime').textContent = formatStudyMinutes(totalStudyMs());
+  renderTimeChart();
 
   drawDailyChart();
   drawAccuracyChart();
